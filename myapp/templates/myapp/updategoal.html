@@ -1,0 +1,77 @@
+{% include 'myapp/header.html' %}
+
+<div class="m-10 mx-[20vw] bg-white rounded-3xl px-[7vw] py-[3vh]">
+  <h1 class="text-indigo-700 text-center font-bold text-[5vh] border-b-4 pb-5">
+    Update Your Goal
+  </h1>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="grid grid-cols-2 py-4">
+        <div class="px-4">
+      <label
+        for="Calories"
+        class="block mb-2 font-medium text-indigo-500 text-2xl"
+        >Calories</label
+      >
+      <input
+        type="number"
+        id="calories"
+        name="calories"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        value="{{calories}}"
+        required
+      />
+    </div>
+      <div class="px-4">
+      <label for="carbs" class="block mb-2 font-medium text-indigo-500 text-2xl"
+        >Carbs</label
+      >
+      <input
+        type="text"
+        id="carbs"
+        name="carbs"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        value="{{carbs}}"
+        required
+      />
+      </div>
+      <div class="px-4">
+      <label
+        for="protein"
+        class="block mb-2 font-medium text-indigo-500 text-2xl"
+        >Protein</label
+      >
+      <input
+        type="text"
+        id="protein"
+        name="protein"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        value="{{protein}}"
+        required
+      />
+      </div>
+      <div class="px-4">
+        <label for="fats" class="block mb-2 font-medium text-indigo-500 text-2xl"
+        >Fats</label
+      >
+      <input
+        type="text"
+        id="fats"
+        name="fats"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        value="{{fats}}"
+        required
+      />
+      </div>
+      
+    </div>
+    <div class="flex">
+        <button class="mx-4 p-3 rounded-lg bg-indigo-400 text-white w-[50vh] mx-auto" type="submit">
+      Submit
+    </button>
+    </div>
+    
+  </form>
+</div>
+
+{% include 'myapp/footer.html' %}

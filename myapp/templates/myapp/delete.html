@@ -1,0 +1,25 @@
+
+
+{% include 'myapp/header.html' %}
+
+
+<div class="m-10 mx-[20vw] bg-white rounded-3xl px-[7vw] py-[3vh]">
+    <h1 class="text-indigo-700 text-center font-bold text-[5vh] border-b-4 pb-5">
+      Are You sure You want to delete this item?
+    </h1>
+    <div class="row m-5">
+        <div class="col-md-12">
+            <form method="POST">
+
+                {% csrf_token %}<div class="flex">
+                    <button class="mx-4 p-3 rounded-lg bg-red-400 text-white w-[50vh] mx-auto" type="submit">
+                  Delete
+                </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+  </div>
+    
+  {% include 'myapp/footer.html' %}

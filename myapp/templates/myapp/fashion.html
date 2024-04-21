@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutratrack</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/0D0Hg2F/nutratrack-website-favicon-color.png">
+</head>
+<body class="bg-gray-200">
+    
+<nav class="border-gray-200 bg-yellow-500">
+    <div class=" flex flex-wrap items-center justify-between  bg-yellow-500 p-7">
+        <h1 class="text-white font-bold text-2xl">Fashionista</h1>
+    </div>
+  </nav> 
+  <div class="m-10 bg-white rounded-3xl px-[7vw] py-[3vh]">
+    <h1 class="text-yellow-500 font-bold text-[4vh] text-center border-b-4 py-7 border-yellow-500">Vogue</h1>
+    <div class="grid grid-cols-3">
+    {% for i in fashion %}
+            <div class="p-2">
+                <img src="{{i.image}}" alt="">
+                <h2 class="p-2 text-blue-600 text-xl font-bold" >{{i.caption}}</h2>
+            </div>
+        {% endfor %}
+    </div>
+    
+  </div>
+  
+</body>
+</html>

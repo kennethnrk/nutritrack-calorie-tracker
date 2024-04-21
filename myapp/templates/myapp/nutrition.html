@@ -1,0 +1,220 @@
+{% include 'myapp/header.html' %}
+
+<div class="m-10 bg-white rounded-3xl px-[7vw] py-[3vh]">
+  <h1 class="text-indigo-700 text-center font-bold text-[5vh] border-b-4 pb-5">
+    View Your calories
+  </h1>
+  <div class="grid grid-cols-2 my-10">
+    <div class="mr-10">
+      <div class="form-group row">
+        <form method="POST">
+          {% csrf_token %}
+
+          <label
+            for="food_consumed"
+            class="block mb-2 font-medium text-indigo-500 text-2xl"
+            >Select Food To Add</label
+          >
+          <div class="flex">
+            <select
+              name="food_category"
+              id="food_category"
+              class="bg-gray-50 mx-1 border border-yellow-400 text-gray-900 text-xl rounded-lg bg-yellow-400 text-white block w-full p-2.5"
+              onchange= ""
+              >
+              <option value="Protein">Protein</option>
+              <option value="Fats">Fats</option>
+              <option value="Carbs">Carbs</option>
+            </select>
+            <select
+              name="food_consumed"
+              id="food_consumed"
+              class="bg-gray-50 border border-yellow-400 text-gray-900 text-xl rounded-lg bg-yellow-400 text-white block w-full p-2.5"
+            >
+              {% for food in foods %}
+              <option value="{{food.name}}">{{food.name}}</option>
+              {% endfor %}
+            </select>
+
+            <button
+              class="mx-4 p-3 rounded-lg bg-yellow-400 text-white"
+              type="submit"
+              id="Add"
+            >
+              Add
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="flex py-4">
+        <h3 class="font-medium text-indigo-500 text-2xl py-3">Calorie Goal</h3>
+        <a
+          class="font-bold my-auto mx-4 p-3 rounded-lg bg-indigo-400 text-white"
+          href="/updategoal"
+        >
+          Update</a>
+      </div>
+
+      <div class="w-full bg-gray-200 rounded-full">
+        <div
+          class="bg-yellow-400 text-xs font-medium text-blue-100 text-center p-2 leading-none rounded-full"
+          id="progress"
+          style="width: 45%"
+        ></div>
+      </div>
+
+      <div class="mt-5">
+        <h4 class="block mb-2 font-medium text-indigo-500 text-2xl text-center">
+          Today's Consumption
+        </h4>
+        <div class="relative overflow-x-auto p-3 border-4 border-yellow-400 rounded-xl">
+          <table id="table" class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 p-[3vh] border-yellow-400 border-b-4">
+            <tr >
+              <th class="py-4 px-1">Food </th>
+              <th class="py-4 px-1">Carbs(gm)</th>
+              <th class="py-4 px-1">Protein(gm)</th>
+              <th class="py-4 px-1">Fats(gm)</th>
+              <th class="py-4 px-1">Calories(Kcal)</th>
+              <th class="py-4 px-1">Remove </th>
+            </tr>
+        </thead>
+            {% for c in consumed_food %}
+            <tr>
+              <td class="py-2 px-1">{{c.food_consumed.name}}</td>
+              <td class="py-2 px-1">{{c.food_consumed.carbs}}</td>
+              <td class="py-2 px-1">{{c.food_consumed.protein}}</td>
+              <td class="py-2 px-1">{{c.food_consumed.fats}}</td>
+              <td class="py-2 px-1">{{c.food_consumed.calories}}</td>
+              <td class="py-2 px-1">
+                <a class="btn btn-danger" href="{% url 'delete' c.pk %}">X</a>
+              </td>
+            </tr>
+
+            {% endfor %}
+
+            <tr class="bg-info">
+              <td class="py-2 px-1" id="name"><b>Total</b></td>
+              <td class="py-2 px-1" id="totalCarbs"><b></b></td>
+              <td class="py-2 px-1" id="totalProtien"><b></b></td>
+              <td class="py-2 px-1" id="totalFats"><b></b></td>
+              <td class="py-2 px-1" id="totalCalories"><b></b></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="">
+        <h4 class="block mb-2 font-medium text-indigo-500 text-2xl">
+          Today's breakdown
+        </h4>
+      </div>
+      <div class="card-header text-white bg-info">
+        <h4>Nutrients breakdown</h4>
+      </div>
+      <div class="w-[30vw]">
+        <canvas id="myChart" width="400" height="400"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+  var table = document.getElementById("table");
+  var carbs = 0,
+    protein = 0,
+    fats = 0,
+    calories = 0;
+
+
+  for (var i = 1; i < table.rows.length - 1; i++) {
+    console.log(table.rows[i].cells[1].innerHTML);
+    carbs += parseFloat(table.rows[i].cells[1].innerHTML);
+    carbs = Math.round(carbs);
+    protein += parseFloat(table.rows[i].cells[2].innerHTML);
+    protein = Math.round(protein);
+    fats += parseFloat(table.rows[i].cells[3].innerHTML);
+    fats = Math.round(fats);
+    calories += parseFloat(table.rows[i].cells[4].innerHTML);
+    calories = Math.round(calories);
+  }
+
+  document.getElementById("totalCarbs").innerHTML = "<b>" + carbs + "(gm)</b>";
+  document.getElementById("totalProtien").innerHTML =
+    "<b>" + protein + "(gm)</b>";
+  document.getElementById("totalFats").innerHTML = "<b>" + fats + "(gm)</b>";
+  document.getElementById("totalCalories").innerHTML = "<b>" + calories + "(Kcal)</b>";
+  const goalclas = "{{ calories }}"
+  calspc = (calories/Number(goalclas))*100;
+  calspc = Math.round(calspc);
+  console.log(calspc)
+
+  document.getElementById("progress").setAttribute("style", "width:" + calspc + "%");
+
+  var calPer = (calories / 2000) * 100;
+
+  var total = carbs + protein + fats;
+  var carbsP = Math.round((carbs / total) * 100);
+  var protienP = Math.round((protein / total) * 100);
+  var fatsP = Math.round((fats / total) * 100);
+
+  var ctx = document.getElementById("myChart").getContext("2d");
+
+  var myChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: [
+        "Carbs " + carbsP + "%",
+        "Protein " + protienP + "%",
+        "Fats " + fatsP + "%",
+      ],
+      datasets: [
+        {
+          label: "# of Votes",
+          data: [carbsP, protienP, fatsP],
+          backgroundColor: [
+            "rgba(255, 99, 132, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+          ],
+          borderColor: [
+            "rgba(255, 99, 132, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+          ],
+          borderWidth: 1,
+        },
+      ],
+    },
+  });
+</script>
+<script>
+  // Get references to the select elements
+  const foodCategorySelect = document.getElementById('food_category');
+  const foodConsumedSelect = document.getElementById('food_consumed');
+  
+  // Define an onchange function for the food_category select
+  foodCategorySelect.onchange = function() {
+    // Get the selected category value
+    const selectedCategory = foodCategorySelect.value;
+    
+    // Clear the food_consumed select options
+    foodConsumedSelect.innerHTML = '';
+    
+    // Loop through the foods and add options of the relevant category
+    {% for food in foods %}
+      if ("{{food.category}}" === selectedCategory) {
+        const option = document.createElement('option');
+        option.value = "{{food.name}}";
+        option.textContent = "{{food.name}}";
+        foodConsumedSelect.appendChild(option);
+      }
+    {% endfor %}
+  };
+</script>
+
+{% include 'myapp/footer.html' %}
